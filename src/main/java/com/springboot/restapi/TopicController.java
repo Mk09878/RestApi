@@ -44,7 +44,7 @@ public class TopicController {
 
     @RequestMapping(method = RequestMethod.PUT, value = "/topics/{id}") // To specify POST request
     public void updateTopic(@PathVariable String id, @RequestBody Topic topic){
-        topicService.updateTopic(id, topic);
+        topicService.updateTopic(topic);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/topics/{id}")

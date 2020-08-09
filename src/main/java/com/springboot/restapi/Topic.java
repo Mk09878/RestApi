@@ -1,10 +1,18 @@
 package com.springboot.restapi;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity // JPA knows to create a table called Topic with 3 columns id, name and description. Each instance of this class is now a row in the Topic table.
 public class Topic {
+    @Id // Specifies id as the primary key
     private String id;
     private String name;
     private String description;
 
+    public Topic(){
+
+    }
 
     public Topic(String id, String name, String description) {
         this.id = id;

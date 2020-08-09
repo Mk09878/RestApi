@@ -1,5 +1,6 @@
 package com.springboot.restapi;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -7,47 +8,40 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class TopicService {
+public class TopicService  {
+
+    private final TopicRepository topicRepository;
+
     private List<Topic> topics;
-    public TopicService() {
+    public TopicService(TopicRepository topicRepository) {
         this.topics = new ArrayList<>(Arrays.asList(
                 new Topic("spring", "Spring Framework", "Spring Framework Description"),
                 new Topic("java", "Core Java", "Core Java Description"),
                 new Topic("javascript", "JavaScript", "JavaScript Description")
         ));
+        this.topicRepository = topicRepository;
     }
 
     public List<Topic> getTopics(){
+        List<Topic> topics = new ArrayList<>();
+        topicRepository.findAll()
+                .forEach(topics::add);
         return topics;
     }
 
     public Topic getTopic(String id) {
-        for (Topic topic : topics) {
-            if (topic.getId().equals(id))
-                return topic;
-        }
-        return new Topic("Null","Null","Topic not found");
+        return topicRepository.findById(id).orElse(null);
     }
 
     public void addTopic(Topic topic){
-        topics.add(topic);
+        topicRepository.save(topic);
     }
 
-    public void updateTopic(String id, Topic updated_topic){
-        for(int i = 0; i < topics.size(); i++){
-            if(topics.get(i).getId().equals(id)) {
-                topics.set(i, updated_topic);
-                return;
-            }
-        }
+    public void updateTopic(Topic updated_topic){
+        topicRepository.save(updated_topic); // Checks if id is present, if yes then updates the row
     }
 
     public void deleteTopic(String id) {
-        for(int i = 0; i < topics.size(); i++){
-            if(topics.get(i).getId().equals(id)){
-                topics.remove(i);
-                break;
-            }
-        }
+        topicRepository.deleteById(id);
     }
 }
